@@ -1,0 +1,2572 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PayPal.Here.SDK.Win81</name>
+    </assembly>
+    <members>
+        <member name="T:PayPal.Here.SDK.Authentication.ICredentials">
+            <summary>
+            MerchantCredentials is one of the more critical aspects of the initial setup when an application starts. Note that the
+            SDK is capable of working in a Peripherals only mode in which case there is no need to set up MerchantCredentials and such
+            However, for any access to the PayPal cloud services a valid MerchantCredentials needs to be available.
+            This class defines the APIs that can be used on a MerchantCredentials object
+            When constructing the MerchantCredentials, the application is also expected to set up a listener object 
+            (by implementing the AuthenticationListener) that will be notified when the access token expires. It is the developer's 
+            (app) responsibility to get a new access token via the OAuth process and setup a new Merchant object
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Concurrencies.AsyncLock">
+            <summary>
+            An asynchronous lock, that can be used in conjuction with C# async/await
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Concurrencies.AsyncLock.LockAsync(System.Threading.CancellationToken)">
+            <summary>
+            Acquires the lock, then provides a disposable to release it.
+            </summary>
+            <param name="ct">A cancellation token to cancel the lock</param>
+            <returns>An IDisposable instance that allows the release of the lock.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.DomainFactory.CreateKeyedInCardData(System.String,System.String,System.String)">
+            <summary>
+            Create a basic object with credit card information.
+            <para>Use this only when dealing with a manual credit card entry</para>
+            </summary>
+            <param name="cardNumber"></param>
+            <param name="expirationDate"></param>
+            <param name="cvv2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.DomainFactory.CreateInvoiceItem(System.String,System.String,System.Decimal,System.String)">
+            <summary>
+            Creates an invoice item with the specified values
+            </summary>
+            <param name="itemId">unique item Id</param>
+            <param name="name">name of the item</param>
+            <param name="unitPrice">unit price of the item</param>
+            <param name="detailId">optional item "variation id"</param>
+            <remarks>Will default the quantity to 1</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.DomainFactory.CreateInvoiceItem(System.String,System.String,System.Decimal,PayPal.Here.SDK.Domain.Tax,System.String)">
+            <summary>
+            Creates an invoice item with the specified values
+            </summary>
+            <param name="itemId">unique item Id</param>
+            <param name="name">name of the item</param>
+            <param name="unitPrice">unit price of the item</param>
+            <param name="tax">The tax rate used for the item</param>
+            <param name="detailId">optional item "variation id"</param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.DomainFactory.CreateInvoiceItem(System.String,System.String,System.Decimal,PayPal.Here.SDK.Domain.Tax,PayPal.Here.SDK.Domain.Discount,System.String)">
+            <summary>
+            Creates an invoice item with the specified values
+            </summary>
+            <param name="itemId">unique item Id</param>
+            <param name="name">name of the item</param>
+            <param name="unitPrice">unit price of the item</param>
+            <param name="tax">The tax rate used for the item</param>
+            <param name="discount">The discount line item to apply</param>
+            <param name="detailId">optional item "variation id"</param>
+            <returns></returns>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.CardErrors">
+            <summary>
+            When dealing with cards we may encounter errors.  Here are
+            the errors we will return.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents">
+            <summary>
+            These are the events you might be sent.  Some are
+            swiper specific and others are applicable to ChipAndPin events.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.SoftwareVersionNotSupported">
+            <summary>
+            Cannot proceed further until the terminal is updated.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.BadSwipe">
+            <summary>
+            When the card reader/SDK could not read the swiped or the inserted card.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.CardInserted">
+            <summary>
+            When a card is inserted within the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.CardInvalid">
+            <summary>
+            When an invalid card is inserted within the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.CardRemoved">
+            <summary>
+            When the card is removed from the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.NeedPin">
+            <summary>
+            When the user is prompted to enter the pin on the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.NeedPinLastAttempt">
+            <summary>
+            When the user is prompted one last attempt to enter the pin on the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.PinEntered">
+            <summary>
+            When the user has entered the pin on the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.PinIncorrect">
+            <summary>
+            When a user has entered an incorrect pin on the EMV device.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.PinEnteredLastChance">
+            <summary>
+            When the user has one last chance to enter the correct pin on the EMV device.
+            Else, the transaction could be declined or cancelled.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.PinBlocked">
+            <summary>
+            When the pin entered is blocked.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.PinVerified">
+            <summary>
+            When the pin entered by the user has been verified.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.CardBlocked">
+            <summary>
+            When the card used by the user has been blocked.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.CardChipBroken">
+            <summary>
+            When a card inserted into the EMV device has a broken chip.
+            In this case, the user maybe requested to use the swipe feature on the EMV device to
+            proceed with the transaction.
+            NOTE: Along with this event, a string based boolean value is sent within the PPError.GetDetailMessage()
+            that allows the app to check whether the merchant can ask the user for a fallback swipe or not.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.SwipeNotAllowed">
+            <summary>
+            Indicates that the EMV device is not accepting card swipes yet.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.RequestToApprove">
+            <summary>
+            When the transaction is approved by the EMV device. Once the app receives this event, it can either
+            take the user to the signature screen (in case of a signature type card) or directly to the receipt screen.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.RequestToCancel">
+            <summary>
+            When the transaction is cancelled by the user on the terminal. Once the app receives this event
+            it would need to wait for the TransactionManager to emit the "TransactionCancel" PPError object
+            via the response handler prior to taking the user to the next screen.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.RequestToDecline">
+            <summary>
+            When the transaction is declined by the EMV device. Once the app receives this event
+            it would need to wait for the TransactionManager to emit the "TransactionDeclined" PPError object
+            via the response handler prior to taking the user to the next screen.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.RequestToFail">
+            <summary>
+            When the transaction has failed.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.RequestToTerminate">
+            <summary>
+            When the transaction has been terminated.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.DecisionRequired">
+            <summary>
+            When a user is prompted to select an application on the inserted card with which they
+            would like to proceed with the transaction.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.OnBattery">
+            <summary>
+            Indicates the EMV device is currently running on battery.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.ChargingBattery">
+            <summary>
+            Indicates the EMV device is connected to the charger.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.ChargedBattery">
+            <summary>
+            Indicates the EMV device is charged completely.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents.LowBattery">
+            <summary>
+            Indicates the EMV device is running low on battery. Please connect to a charger.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.CreditCardDataSourceType">
+            <summary>
+            An enum defining what the source of the data was
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.EncryptionMode">
+            <summary>
+            The type of encryption on this secure credit card.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType">
+            <summary>
+            The Payment Events we'll send to the app.  These are currently a simple enum.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.Idle">
+            <summary>
+            The TransactionManager has entered the idle state.  It is not doing any work and is ready to begin a payment or refund.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.GettingPaymentInfo">
+            <summary>
+            The transactionManager has entered a state of data collection.  beginPayment() has been called and we
+            are currently collecting information from card readers or the application.  You can now set a ShoppingCart,
+            TransactionExtras, Signatures, and other data related to this payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.CardDataReceived">
+            <summary>
+            The transaction manager has received card data.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.ProcessingPayment">
+            <summary>
+            The TransactionManager has entered a state where it is communicating with the backend servers to collect a payment.
+            It is now too late to cancel the payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.WaitingForSignature">
+            <summary>
+            The TransactionManager has entered a state where it has completed the transaction successfully and is
+            waiting for the app to collect a signature from the customer and call the finalizePayment API.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.TransactionCanceled">
+            <summary>
+            The SDK has successfully canceled the payment with the backend.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentEventType.TransactionDeclined">
+            <summary>
+            The EMV terminal declined the transaction and the SDK has successfully canceled the payment.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.InitiateTransactionEnum">
+            <summary>
+            This enum list represents the type of EMV operation being performed.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.PaymentType">
+            <summary>
+            When taking payment you can specify what type of payment you would like to make.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:PayPal.Here.SDK.Domain.Enumerations.PaymentType.CardReader" -->
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentType.UnencryptedCreditCard">
+            <summary>
+            Pay with a card, but manually enter or scan the number.  (i.e., there will be no swipe)
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentType.Cash">
+            <summary>
+            Cash payment
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentType.Check">
+            <summary>
+            Check payment
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.PaymentType.CheckedInPayment">
+            <summary>
+            Charge a user who's checked in.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes">
+            <summary>
+            The ways in which we can currently connect to card readers.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.ReaderTypes">
+            <summary>
+            The current list of supported card reader types.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.SendReceiptTransactionType">
+            <summary>
+            When sending the receipt you can specify what is tht type of the transaction you want to send the receipt
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.NotDoingPayment">
+            <summary>
+            When we are not doing any operation and are idle.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.NeedPaymentType">
+            <summary>
+            When we call beginPayment and are listening for card data.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.UserDecisionRequired">
+            <summary>
+            In case of EMV, if the customer needs to decide on the payment application to be used for payment via the
+            terminal.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.PaymentTypeAvailable">
+            <summary>
+            Once we have obtained the card data either from the terminal or the swiper.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.AuthorizingPayment">
+            <summary>
+            When we have the card data and are ready to take/authorize a payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.ProceedWithAuthorizingPayment">
+            <summary>
+            When the app has asked the SDK to continue with the transaction and take the payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.ConfirmingAuthorization">
+            <summary>
+            In case of EMV, once the MTP call is successful ,
+            we need to wait for a response from the terminal as well, that would either approve or decline this
+            transaction.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.HandlingWrongOnlinePin">
+            <summary>
+            In case of EMV, Online PIN, if the user entered PIN is wrong then
+            we will enter in to this state asking the user to enter the pin again
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.WaitingForSignature">
+            <summary>
+            Once the authorization is completed, we would need to collect the signature from the customer.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.NoSignatureRequired">
+            <summary>
+            In case of EMV, not all flows would need a signature. For example, Chip and Pin.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.VoidingPayment">
+            <summary>
+            If the transaction is cancelled or declined and when are trying to void it. This state is only applicable to EMV
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.VoidingAuthorization">
+            <summary>
+            Once someone has called authorizePayment and recieved an authorizationRecord. We move to this state if they call
+            voidAuthorization.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.CapturingPayment">
+            <summary>
+            We move to this state when capturing payment on a previous authorization.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.RefundingPayment">
+            <summary>
+            We move to this state when refunding a transaction.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.FinalizingPayment">
+            <summary>
+            Finalizing a payment via providing a signature bitMap. Once all payment flows are complete.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Domain.Enumerations.TransactionManagerState.SendingReceipt">
+            <summary>
+            Sending a payment or authorization receipt.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.BusinessInfo.BillingAddress">
+            <summary>
+            The billing address contains information about the location where the bill for an item needs to be shipped.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Enumerations.GratuityTypeEnum">
+            <summary>
+            This enum type indicates whether the checkin gratuity is supported at merchants location
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.IEMVDeviceData.ConnectionStatus">
+            <summary>
+            The connection status of the EMV device such as Connected, MandatoryUpdate etc.
+            </summary>
+            <returns>A EMVConnectionStatus object indicating the connection status.</returns>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.IMerchantPrivilege.CanProcessAMEX">
+            <summary>
+             A boolean to indicate whether the merchant can process an AMEX card or not.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.IMerchantPrivilege.CanProcessDiscover">
+            <summary>
+            A boolean to indicate whether the merchant can process a Discover card or not.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.PaymentEvent">
+            <summary>
+            Currently only provides the event type.  Could be expanded in the future to include
+            additional information about the payment event.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.SecureCreditCard">
+            <summary>
+            Sets of card data that move in/out of the SDK must implement this interface.
+            
+            The CardReaderManager will send up an object that implements ISecureCreditCard when
+            it detects a card swipe.  Also, when taking a payment you can supply an object
+            that implements ISecureCreditCard (like the domain.ManualEntryCardData object, the ISecureCreditCard
+            object that CardReaderManager emitted during a swipe, or your own credit card object
+            that implements ISecureCreditCard).
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.CardHoldersName">
+            <summary>
+            The card holder's name.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.LastFourDigits">
+            <summary>
+            The last 4 digits of the credit card.  For some cards, that is the
+            only portion of the number that is available, for other cards (like
+            manual entry credit cards) the entire number may be known.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.FirstFourDigits">
+            <summary>
+            The first 4 digits of the card. This is not guaranteed. we return
+            the valid digits if we know else the masked number will be returned.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.CVVNumber">
+            <summary>
+            The CVV number of the credit card if known, null otherwise.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.ExpiryDate">
+            <summary>
+            The expiry date of the credit card.
+            The format of the string is as follows: "092019" represents September of the year 2019.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.EncryptionMode">
+            <summary>
+            The encryption mode of this card.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.RawCardNumber">
+            <summary>
+            The full unencrypted card number.  For some cards this value is not obtainable and may be null.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.SecureData">
+            <summary>
+            An object containing the secure credit card data.  Please see additional documentation
+            for the format that is needed by the backend system.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.PostalCode">
+            <summary>
+            Return the postal code. Might not be known, in which case this will return null.
+            If this value is set, it will be applied to the invoice's 
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.SecureCreditCard.IsSignatureRequired">
+            <summary>
+             Returns a boolean to indicate whether a signature is required or not in order to complete the transaction.
+             NOTE: this is used mainly in case of EMV flow where the chip on the card and terminal decide whether a customer
+             signature is required or not and the app is expected honor the same.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.SecureCreditCardData.Get(System.String)">
+            <summary>
+            A method to get a specific value key in the secure credit card data
+            </summary>
+            <param name="valueKey">The key to look for</param>
+            <returns>The value or null if it does not exist</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.SecureCreditCardData.IsNull(System.String)">
+            <summary>
+            A method to determine if a specific value is null
+            </summary>
+            <param name="valueKey">The key to look for</param>
+            <returns>True if the value is null</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Domain.SecureCreditCardData.Copy">
+            <summary>
+            Make a copy of the secure data
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.Shipping">
+            <summary>
+            Contains information about the shipping cost and tax rate.
+            
+            To create a shipping cost use DomainFactory.newShipping(cost, taxrate)
+            TaxRates used for shipping must have a name ("Shipping Tax", etc).
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.Shipping.Cost">
+            <summary>
+            The shipping cost
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.Shipping.Tax">
+            <summary>
+            TaxRate objects used for shipping must have a name or they will be
+            considered invalid.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.Shipping.TaxValue">
+            <summary>
+            Sets ShippingTax as a value rather than as a percentage.  If both percentage and value
+            are set then the call that happens last will override the other value.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.Shipping.Address">
+            <summary>
+            Address object that contains the shipping information.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.PaymentLimits.MinCardChargeAllowed">
+            <summary>
+            The minimum amount required to take a payment
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.PaymentLimits.MaxCardChargeAllowed">
+            <summary>
+            The maximum amount that could be charged by this merchant
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.PaymentLimits.SignatureRequiredAbove">
+            <summary>
+            The minimum amount to be charged that requires a signature.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.PaymentLimits.MaximumCheckChargeAllowed">
+            <summary>
+            The maximum amount that could be charged while accepting a check for the same.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.PaymentLimits.MaximumCheckinChargeAllowed">
+            <summary>
+            The maximum amount that could be charged while accepting a check-in payment.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.PaymentLimits.CaptureTolerancePercentage">
+            <summary>
+            In the Auth-Capture use case, for a given merchant account, this method provides the
+            maximum allowed capture percentage for every authorization.
+            
+            <para>
+            The application/merchant can use this information to validate the capture amount entered on their
+            UI and throw a local error in case an invalid amount is being set.
+            </para>
+            <para>
+            For example, if the value returned by this method is, lets say 120, if the merchant performs
+            an authorization for an invoice for an amount, lets say $100 then, while performing a capture,
+            the maximum amount that the merchant is allowed to capture would be $120 (120% of the original authorized amount).
+            If the merchant tries to capture more than the capture tolerance, it would result in an error sent by the PayPal
+            backend.
+            </para>
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Domain.PPCreditCard">
+            <summary>
+            PPCreditCard is THE ultimate keeper of credit card data that we (SDK) has access to.
+            PPCreditCard is made up of two parts:
+            1. The external/open-for-all data. This is usually the card data that you can get anyway
+            just by looking at the card. For example, card holder's name, CVV number, expiry date,
+            card brand, last four digits of card are all information that can and should be available to
+            applications built on top of the SDK. This point is enforced by the ISecureCreditCard interface
+            which gives access to just these items.
+            
+            2. The private/internal data of the credit card. This is the data that you cannot just by looking
+            at the card. For example, when you swipe the card you get track data from the reader; in case of
+            chip and PIN we get some other type of data. Usually, the reader encrypts/encodes this kind of
+            information anyway meaning this data is useless even at the SDK level; regardless there is nothing
+            to be gained from sharing this information at an application layer and on the flip side it does
+            make the SDK look silly if we make the app process more than it has to!
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Domain.TransactionRecord.PayerInfo">
+            <summary>
+            Information regarding the customer for receipt purposes
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.CancelPaymentErrors.Success">
+            <summary>
+            The TransactionManager has cleared its state and is no longer authorizing with card readers or accepting ShoppingCarts, etc for a payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.CancelPaymentErrors.IllegalState">
+            <summary>
+            We cannot cancel at this time.  The TransactionManager must not be idle or processing a payment with the backend when you call cancelPayment.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors">
+            <summary>
+            This enum consists of all the different error types that would be returned by the SDK through the response
+            handlers while invoking the merchant manager APIs.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.Success">
+            <summary>
+            If the operation was successful.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.NotYetImplemented">
+            <summary>
+            If the API/method is not implemented yet.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.MerchantAlreadyCheckedIn">
+            <summary>
+            If the Merchant is already checked in and cannot be checked in with the same internal name once again.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.MerchantNotCheckedIn">
+            <summary>
+            If the merchant is not checked-in, in which case, some of the APIs cannot be invoked.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.RequestAlreadyInFlight">
+            <summary>
+            Trying to perform an action that is already in flight and the response of which is still pending.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.ServerError">
+            <summary>
+            Any server error that occurred while calling the back end service.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.NetworkError">
+            <summary>
+            Any network error that occurred while calling the back end service.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.NetworkTimeout">
+            <summary>
+            A network time out error while waiting the back end server to respond.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.BadConfiguration">
+            <summary>
+            Any invalid parameters that is passed in the request.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.InvalidCredentials">
+            <summary>
+            If the credentials used are invalid.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.InvalidOperation">
+            <summary>
+            In case of invoking an invalid operation.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.LocationUnknown">
+            <summary>
+            Merchant's location was not found.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.Unknown">
+            <summary>
+            Any unknown error that occurred during the course of the API invocation.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.LocationNotFound">
+            <summary>
+            If the location to which either the merchant or the customer is checked into is no longer valid or,
+            if the merchant's previously opened location is now closed.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.LocationNotOwned">
+            <summary>
+            If the merchant does not own the location with which they are trying to take a payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.UnsupportedRegion">
+            <summary>
+            If the location at which the merchant wants to check in or take payment is not supported.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.InvalidLocation">
+            <summary>
+            If the location co ordinates of the merchant is invalid.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.MerchantErrors.InvalidMerchant">
+            <summary>
+            If the merchant is not eligible or restricted to taking payments.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors">
+            <summary>
+            The list of possible errors you can receive when taking a payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.Success">
+            <summary>
+             Your funds have been successfully captured.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.Failure">
+            <summary>
+            Failure while processing.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.NotYetImplemented">
+            <summary>
+            Your friendly neighborhood SDK dev is working on this one.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.NetworkTimeout">
+            <summary>
+            The server took too long.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.Retrying">
+            <summary>
+            SDK is retrying a failed network call.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.TimeoutWaitingForSwipe">
+            <summary>
+            We only wait one minute for a swipe when asked to take payment on a card.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.PaymentDeclined">
+            <summary>
+            Card declined.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.NoDeviceForCardPresentPayment">
+            <summary>
+            We can't finalizePayment with a CardReader payment type when there's no card reader.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.NoPaymentInfoPresent">
+            <summary>
+            The app asked the SDK to do a payment, but no card was scanned after beginTransaction was called nor was
+            any checked-in customer information was provided to take a payment.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.BadUserCredentials">
+            <summary>
+            Authentication failed.  We were unable to use the oauth refresh token/url successfully.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.EmptyShoppingCart">
+            <summary>
+            You can't take a payment with an empty shopping cart.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.ServerError">
+            <summary>
+            The server sent us an error.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.NetworkError">
+            <summary>
+            We experienced an error trying to use the network.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.BadConfiguration">
+            <summary>
+            We were asked to do something that we cannot.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.InvalidOperation">
+            <summary>
+            In case of invoking an invalid operation. This error would occur if we are trying to invoke a service call.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.InvalidInvoiceDetail">
+            <summary>
+            In case there is any discrepencies with the invoice that is currently being used.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.UnknownLocationError">
+            <summary>
+            If the location service is turned off. We would need location information while taking payments.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.MerchantAccountLimited">
+            <summary>
+            If the merchant account has some restrictions/limitations set on the amount that could be
+            present within the account. In order to continue, the limitation/restriction must be removed.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.PaymentErrors.Unknown">
+            <summary>
+            Pathetic catch-all for errors of unknown type.  SDK team is working to reduce the number of these.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Errors.Enumerations.SendReceiptErrors">
+            <summary>
+            The list of possible errors you can receive while send a receipt to a customer.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.SendReceiptErrors.Success">
+            <summary>
+            When the receipt API was successful and the receipt would be sent to the desired email or phone number shortly.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.SendReceiptErrors.BadConfiguration">
+            <summary>
+            When an invalid input such as email or phone number is provided.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.SendReceiptErrors.Failure">
+            <summary>
+            In case of a failure that occurred while invoking the backend APIs.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Errors.Enumerations.SendReceiptErrors.Unknown">
+            <summary>
+            Pathetic catch-all for errors of unknown type.  SDK team is working to reduce the number of these.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Errors.LibraryErrors.MapApiErrors(PayPal.Here.SDK.Services.ServiceException)">
+             Method to map the errors between here api and figserv and setting a common error code that would be propagated
+             upstream.
+            
+             @param error : service error obj obtained while invoking a backend here api or figserv service.
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:PayPal.Here.SDK.Errors.PPError`1" -->
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Errors.PPError`1.#ctor(`0)" -->
+        <member name="M:PayPal.Here.SDK.Errors.PPError`1.#ctor(`0,System.String)">
+            <summary>
+            Constructs a PPError with an error code from the provided type AND a given detailed description.
+            </summary>
+            <param name="errorCode">The enum value from the enum type T</param>
+            <param name="description">The detailed description of the error.  Can be logged or used in support calls.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Errors.PPError`1.#ctor(`0,System.String,System.String)">
+            <summary>
+            Constructs a PPError with an error code from the provided type AND a given detailed description.
+            </summary>
+            <param name="errorCode">The enum value from the enum type T</param>
+            <param name="detailErrorCode">The error code returned by the original service call.</param>
+            <param name="description">The detailed description of the error.  Can be logged or used in support calls.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:PayPal.Here.SDK.Errors.PPError`1.ErrorCode" -->
+        <member name="P:PayPal.Here.SDK.Errors.PPError`1.DetailErrorCode">
+            <summary>
+            A string describing the error code returned back by the PP services.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Errors.PPError`1.DetailedDescription">
+            <summary>
+            A string describing the error in detail
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Errors.PPError`1.DeveloperErrorMessage">
+            <summary>
+            A detailed, low-level error message, much more meaningful while development.
+            The developer could use this string to see what exactly is going wrong.
+            Not suitable to display this message as is on the app UI.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Extensions.InvoiceExtensions.ApplyPostalCode(PayPal.Here.SDK.Invoicing.Invoice,System.String)">
+            <summary>
+            Quick way to apply a postal code to an invoice. Typical scenario is when credit card data has this information.
+            <para>
+            If the provided postal code is empty, it will not be used. If it has a value, it will override any existing postal code.
+            </para>
+            </summary>
+            <param name="invoice">Invoice to update</param>
+            <param name="postalCode">Psotal code to apply</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Extensions.ServiceExceptionExtensions.ToTransactionRecord(PayPal.Here.SDK.Services.ServiceException,PayPal.Here.SDK.Invoicing.Invoice)" -->
+        <member name="M:PayPal.Here.SDK.Extensions.StringExtensions.ToFormatedString(System.String,System.Object[])">
+            <summary>
+            Format as an invariant culture the give string and its arguments (equivalent of string.Format("Hello {0}", "world!");)
+            </summary>
+            <param name="source"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:PayPal.Here.SDK.IAuthenticationListener">
+            <summary>
+            The IAuthenticationListener notifies the calling application that the current service credentials are no longer
+            valid.  This is a perhaps more graceful method of notifying the application, rather than throwing
+            authentication errors at the time of the service call.
+            
+            Note that while this listener is proactive in warning of an expired token, it is up to the calling application
+            to implement the logic of retrieving a new, valid token.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.ICardReaderListener.OnPaymentReaderDiscoveryStarted(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This method will be called back to indicate that a payment reader discovery has been initiated by the SDK.
+            </summary>
+            <param name="port">Indicates how the reader is connected to this device (bluetooth, usb, audio jack etc).</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.ICardReaderListener.OnPaymentReaderConnected(PayPal.Here.SDK.Domain.Enumerations.ReaderTypes,PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)" -->
+        <member name="M:PayPal.Here.SDK.ICardReaderListener.OnPaymentReaderDisconnected(PayPal.Here.SDK.Domain.Enumerations.ReaderTypes)">
+            <summary>
+            This method will be called by the SDK to indicate that a reader previously connected to this device has now
+            become disconnected. The reader could have been disconnected because the user intentionally did so or because
+            of a weak connection (for ex: weak bluetooth connection).
+            
+            Tip: Applications should notify the user of this if this was not something that was expected so that the user
+            can fix any potential connection issues
+            </summary>
+            <param name="readerType">The type of reader that has disconnected.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.ICardReaderListener.OnCardReadSuccess(PayPal.Here.SDK.Domain.SecureCreditCard)">
+            <summary>
+            Called when someone swipes (or inserts) their card via a hardware reader and we get a successful read.
+            </summary>
+            <param name="paymentCard">A SecureCreditCard object. You can hold onto this object and supply it when attempting a payment
+            or refund.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.ICardReaderListener.OnCardReadFailed(PayPal.Here.SDK.Errors.PPError{PayPal.Here.SDK.Domain.Enumerations.CardErrors})">
+            <summary>
+            Called when someone swipes (or inserts) their card via a hardware reader and we FAIL to get a successful read.
+            </summary>
+            <param name="reason">An error from the CardErrors list with a possible detailed message.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.ICardReaderListener.OnCardReaderEvent(PayPal.Here.SDK.Errors.PPError{PayPal.Here.SDK.Domain.Enumerations.CardReaderEvents})" -->
+        <member name="M:PayPal.Here.SDK.ICardReaderListener.OnSelectPaymentDecision(PayPal.Here.SDK.Domain.ChipAndPinDecisionEvent[])">
+            <summary>
+            In case of EMV related flows, this method would be called by the SDK to inform the app that the customer's card
+            inserted into the terminal has multiple payment options associated with it and the app is required to show the
+            list back up to the user to select.
+            The selected ChipAndPinDecisionEvent is then needed to be passed back by the app to the SDK via the
+            providePaymentDecision method within the CardReaderManager.
+            </summary>
+            <param name="decisionEventList">The list of available payment options</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.ICardReaderListener.OnInvalidListeningPort(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This function is called when Application doesn't specify listening port for device and calls WaitForAuthorization()
+            to take the card payments.
+            </summary>
+            <param name="port">The actual port that failed to be used</param>
+        </member>
+        <member name="T:PayPal.Here.SDK.IMerchantListener">
+            <summary>
+            MerchantListener interface is useful for client apps that are interested in getting an updated
+            list of clients without having to explicitly ask for it.
+            To opt in into this feature, the application needs to initiate this mode by invoking the
+            registerMerchantListener and providing an instance of the MerchantListener interface.
+            If this listener is not installed, then the application determines changes to the checked in clients list
+            by using the getCheckedInClients API.
+            Sometimes, it is possible that some customers have been removed from the list and others added to the list
+            at the same time. In this case, both the callback methods will be invoked one at a time. The onAddedNewClients
+            is called first before the onRemovedClients callback is invoked
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.IMerchantListener.OnAddedNewClients(PayPal.Here.SDK.Domain.CheckedInClient[])">
+            <summary>
+            This method is invoked by the SDK when a new client or list of clients have been detected as "checked in"
+            with the currently active merchant.
+            </summary>
+            <param name="newCheckInsList">The list of added check ins</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.IMerchantListener.OnRemovedClients(PayPal.Here.SDK.Domain.CheckedInClient[])">
+            <summary>
+            This method is invoked by the SDK when a client that was previously "checked in" is no longer checked in
+            at the merchant's location
+            Note that the function is invoked with a List of CheckedInClients as more than one client may no longer be
+            checked in. If more details about a specific CheckedInClient is needed - you can invoke the getStatus method
+            to find out more information
+            </summary>
+            <param name="removedCheckInsList">The list of removed check ins</param>
+        </member>
+        <member name="F:PayPal.Here.SDK.Invoicing.Invoice._dueDate">
+            <summary>
+            Setting this value sets a custom due date. Otherwise, it uses
+            the PaymentTerms value to compute the actual due date.
+            </summary>
+            <value>The due date.</value>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.SetQuantityForItem(PayPal.Here.SDK.Invoicing.InvoiceItem,System.Decimal)">
+            <summary>
+             Adjust the quantity of an item in the cart.
+             If quantity is less or equal than 0 we'll remove the item from the cart.
+            </summary>
+            <param name="itemToUpdate">item for which the quantity is being updated.</param>
+            <param name="replacementQuantity">The quantity amount you would like to set for this item, with up to two decimal places</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.GetItemQuantityForId(System.String,System.String)">
+            <summary>
+            Returns the quantity of a cart item in the Invoice.
+            </summary>
+            <param name="itemId"></param>
+            <param name="detailId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.GetItemQuantity(PayPal.Here.SDK.Invoicing.InvoiceItem)">
+            <summary>
+            Returns the quantity of a cart item in the Invoice.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.AddOrUpdateItem(PayPal.Here.SDK.Invoicing.InvoiceItem,System.Decimal)">
+            <summary>
+            Add a Invoice item to the list with the given quantity.
+            If you add an item that is already in the Invoice we'll change
+            the quantity of that item by the amount specified in newQuantity.
+            
+            For example, if you have 4 apples already in the Invoice, and
+            you call addItem(appleItem, 6) there will now be 10 apples in the Invoice.
+            
+            Negative values are allowed.  If you pass a negative value the quantity
+            of that item will be decremented.  If the quantity ever hits zero that
+            item will be removed from the Invoice.
+            </summary>
+            <param name="item">The item you would like to add to the Invoice.</param>
+            <param name="quantity">The quantity amount you would like to add for this item, with up to two decimal places.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.RemoveAllItems">
+            <summary>
+            Empty the Invoice of all items.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.DeleteItem(PayPal.Here.SDK.Invoicing.InvoiceItem)">
+            <summary>
+            Remove this item completely from the Invoice.
+            </summary>
+            <param name="item">Which InvoiceItem to remove</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.Invoice.Recalculate">
+            <summary>
+            Cause the Invoice to recalculate its subtotal, tax total, and grand total.
+            Normally this is done internally when an item is added or removed.  However, if you
+            change the price of an item that was previously added you'll need to call recalculate
+            or the Invoice totals will not be updated.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.TaxInclusive">
+            <summary>
+            Allows the app to specify if we should use an inclusive tax model
+            Are we using inclusive taxes or exclusive taxes?  Returns true if we're using inclusive taxes, false otherwise.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.TaxCalculatedAfterDiscount">
+            <summary>
+            Configure the invoice to (or not to) calculate taxes after applying discounts
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.DueDate">
+            <summary>
+            The due date set on this Invoice. Please use a UTC date value.
+            Set the due date for this Invoice. For most use cases, this is date is the same as when the Invoice
+            is created and is set as the default value. However, for some cases the due date could be set to a
+            value determined by the app
+            If it is not set, the PaymentTerms value to compute the actual due date
+            The DueDate should not be in the past
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.PayerEmail">
+            <summary>
+            The email address for the Buyer.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.BillingInfo">
+            <summary>
+            Billing information of the buyer
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.CustomAmountName">
+            <summary>
+            The name of the applied custom amount set as a description
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.CustomAmountValue">
+            <summary>
+            Add a custom amount to the Invoice for miscellaneous charges. The CustomAmount value is applied
+            to the entire Invoice. The application should also provide a custom amount name as description
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.Discount">
+            <summary>
+            Discount that has been applied to the invoice. Note that the discount is applied to the invoice as a whole
+            and not on a per item basis
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.Gratuity">
+            <summary>
+            The tip used in this invoice.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.ReferrerCode">
+            <summary>
+            Used for partner attributions so we know how the invoices were created.
+            The partner app doesn't need to make use of this API if the referrer code has already been set within the
+            PayPalHereSDK class: PayPalHereSDK.ReferrerCode API.
+            If the referrer code hasn't been set within the PayPalHereSDK class or if we need to change referrer code for
+            any reason, we set the new referrer code using this api without having to re-init the SDK.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.CashierId">
+            <summary>
+            Set the merchant's individual cashier id which distinguishes the different cashiers available for the
+            same merchant.
+            For example, whole foods could be a merchant that has various cashiers spread across to collect payments from
+            customer. Each of those cashiers could be assigned a unique id.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.InvoiceId">
+            <summary>
+            Retrieve the unique ID of this invoice. This ID is generated by the PayPal services and NOT generated
+            locally by the client. When an invoice is first created it may not be synced up with the services in
+            the backend in which case the id returned will be null. You can invoked the save API to force the Invoice
+            object to sync up with the backend.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.GrandTotal">
+            <summary>
+            Returns the current grand total taking into account all the cart items, any tip
+            that has been added, any discount that's been applied, and the tax total (if taxes are enabled).
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.TaxTotal">
+            <summary>
+            Returns the calculated sum of all the item taxes.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.TaxDetails">
+            <summary>
+            Returns a dictionary which summarizes your Invoices TaxDetails.
+            The summary entails each Tax you have applied to your Invoice, 
+            along with the total amount the Tax has contributed to your invoice.
+            If you have applied the same Tax to multiple line items, the dictionary
+            will return one Tax object, with the total over all of the line items 
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.PaymentMethod">
+            <summary>
+            Retrieve the PaymentMethod associated with this Invoice. The default payment method is set to CreditCard
+            but this value is automatically configured when making a transaction using this Invoice. For ex: when
+            the TransactionManager's takePayment() API is invoked with PaymentType set to CASH this will automatically
+            be update in the Invoice as well
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.SubTotal">
+            <summary>
+            Returns the total value of all the InvoiceItem(s). Takes into account the quantity of each item.
+            This call does not consider any tax nor does it consider any tip that might be present.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.TotalDiscount">
+            <summary>
+            Returns the total amount applied by the discount.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.GratuityTotal">
+            <summary>
+            Returns the value of the tip that was applied to this Invoice.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.SubTotalWithTaxes">
+            <summary>
+            Returns the Subtotal + the TaxTotal
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.Invoice.Items">
+            <summary>
+            Returns a copy of this Invoice's list of CartItems.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.InvoicingFactory.CreateInvoiceFromServerJSON(System.String)">
+            <summary>
+            Can create an Invoice object based on a properly formated JSON result
+            </summary>
+            <param name="invoiceServerJSON">The JSON version of the invoice</param>
+        </member>
+        <member name="T:PayPal.Here.SDK.Invoicing.ITransactionController">
+            <summary>
+            The TransactionController defines an interface that can be used by the application install a callback
+            object that is used to customize behavior.
+            TransactionControllers are set on the TransactionManager on a per transaction basis. Unlike persistent
+            listeners that are registered with the manager object, TransactionControllers are "forgotten" by the
+            SDK at the end of each transaction (regardless of success or failure).
+            TransactionControllers interact with the SDK by using the TransactionControlAction and also via the parameters
+            passed into the callbacks. For example, the value HANDLED indicates that the application has taken over processing
+            and that the SDK should stop processing this particular transaction at this state.
+            The CONTINUE flag indicates that the application has either made changes to the input object or left everything untouched
+            and that the SDK should continue processing the transaction.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.ITransactionController.OnPreAuthorize(PayPal.Here.SDK.Invoicing.Invoice,System.String)">
+            <summary>
+            OnPreAuthorize This callback is invoked by the TransactionManager in response to a call to
+            the ProcessPayment() API in the TransactionManager. As soon as the TransactionManager is ready
+            to perform the authorization this callback is invoked. The SDK is responsible for ensuring that
+            this call is invoked in the appropriate thread.
+            </summary>
+            <param name="invoice">This is the Invoice object against which the authorization will be performed. At this point
+            the application can choose to make some changes to the invoice. For example, a tip could
+            be added to an Invoice at this time or an item could be removed etc.</param>
+            <param name="preAuthJSON">Stringified JSON that represents the request payload. This is the request data that will
+            be sent to the backend and the application is allowed to modify this data.
+            CAUTION: Modifying the data incorrectly could cause your transaction to fail. Ensure that any changes by the app
+            will not introduce errors and that you handle the error cases appropriately. More documentation on what
+            the server expects in the payload can be found in the documentation.</param>
+            <returns>TransactionControlAction. Return Handled if you want the SDK to stop processing the transaction at this point
+            If HANDLED is returned, then the Transaction will be canceled but the application is free to keep the invoice around
+            if it so wishes. If the invoice is not required then use the cancel method defined on the Invoice to cancel it.
+            Return Continue if you wish the SDK to continue processing this transaction.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Invoicing.ITransactionController.OnPostAuthorize(System.Boolean)">
+            <summary>
+            onPostAuthorize This callback is invoked by the TransactionManager once authorization is complete. Note that authorization
+            complete does not indicate success. The input parameter indicates whether or not the authorization failed.
+            </summary>
+            <param name="didFail">Indicates whether the authorization failed. A true indicates that the authorization itself failed. A false indicates
+            that the authorization did not fail. It however, DOES NOT indicate that the transaction was successful.</param>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.ReceiptDetailModel.MerchantDetails.Statement">
+            <summary>
+            The value shown on the customer's card statement
+            </summary>
+            <value>The statement.</value>
+        </member>
+        <member name="T:PayPal.Here.SDK.Invoicing.ReceiptDetailModel.ReceiptDetails">
+            <summary>
+            The ReceiptDetails structure is a typed but extensible representation of the JSON-based
+            string field "receiptDetails" on a PayPal Invoice. Some values you are allowed to set,
+            some are reserved for the payment processing services to annotate extended information
+            (such as the last 4 of the card number)
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Invoicing.InvoiceItem">
+            <summary>
+            A line item on an invoice. Can be positive, negative, or zero total/unit price.
+            See https://cms.paypal.com/cms_content/US/en_US/files/developer/PP_InvoicingAPIGuide.pdf
+            for details on field length restrictions and formats.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.Id">
+            <summary>
+            An itemId for YOUR reference - this is not currently stored with the invoice on the server side. This id must
+            be unique amongst all the items on an invoice so that the quantity increment/decrement operators can work.
+            </summary>
+            <value>The identifier.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.DetailId">
+            <summary>
+            An item "variation id" for YOUR reference - this is also not currently stored with the invoice server side.
+            If set, the increment/decrement operators will match on it as well. We've kept it separate from itemId
+            so that when we DO store itemId server side (soon), you won't have to rework a bunch of code.
+            </summary>
+            <value>The detail identifier.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.Description">
+            <summary>
+            A longer description for the item (optional)
+            </summary>
+            <value>The description.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.Name">
+            <summary>
+            The name for this item
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.Quantity">
+            <summary>
+            The quantity of this item purchased, which can be fractional
+            </summary>
+            <value>The quantity.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.UnitPrice">
+            <summary>
+            Price per unit - can be negative or zero (and of course positive)
+            </summary>
+            <value>The unit price.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.ItemDiscount">
+            <summary>
+            Line item discount used
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.Tax">
+            <summary>
+            The tax rate for this item. Note that at the moment tax rules are not flexible on
+            the PayPal backend so our rounding and computation rules are also not flexibile.
+            One alternative is to use a line item for tax. As an example, a 6% tax rate should
+            be .06 for this property.
+            </summary>
+            <value>The tax rate.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.ImageUrl">
+            <summary>
+            The image associated with this item, if any. Must be SSL.
+            </summary>
+            <value>The image URL.</value>
+        </member>
+        <member name="P:PayPal.Here.SDK.Invoicing.InvoiceItem.Order">
+            <summary>
+            The order in which this item appears on the invoice in which it is contained.
+            </summary>
+            <value>The order.</value>
+        </member>
+        <member name="T:PayPal.Here.SDK.Invoicing.TransactionControlAction">
+            <summary>
+            Enums that are used to control the workflow of the callback APIs
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Invoicing.TransactionControlAction.Handled">
+            <summary>
+            Use this return value to indicate that the application has taken over transaction
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Invoicing.TransactionControlAction.Continue">
+            <summary>
+            Use this value to indicate that the SDK should continue with the transaction
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.IPayPalReader.ActivateReader">
+            <summary>
+            Allow other parts of the SDK to inform the device layer that a card swipe is expected.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.IPayPalReader.DeactivateReader">
+            <summary>
+            Conversely, provide an api to let the reader know that a card swipe is no longer expected
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.IPayPalReader.ForceReaderInitialize(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            Manually initialize the card reader
+            </summary>
+            <param name="port"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.IPayPalReader.BeginMonitoring(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This API will start listening for swipers on the port specified by enum ReaderConnectionTypes. 
+            (Ex. AudioJack, Bluetooth, etc.)
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.IPayPalReader.EndMonitoring(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This API will stop listening for swipers on the port specified by enum ReaderConnectionTypes. 
+            (Ex. AudioJack, Bluetooth, etc.)
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.IPayPalReader.MerchantSetReader(PayPal.Here.SDK.Readers.ChipNPin.MiuraMetaData)">
+            <summary>
+            This APi will invoke the MerchantSetReader to associate the card reader with the active merchant.
+            </summary>
+            <param name="metaData">EMVDevice metadata which would contain information about the terminal.</param>
+        </member>
+        <member name="P:PayPal.Here.SDK.IPayPalReader.AvailableReaders">
+            <summary>
+            Observers who register after a device is connected will
+            never receive the connect event.  Therefore, let them discover if what
+            readers are available (return value of "null" means "no devices,
+            otherwise it's a list of the available readers)
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.IPayPalReader.ActiveListeningPort">
+            <summary>
+            This API will be get the current active listening port for the swipers
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.IPayPalReader.ConnectedCardReaderName">
+            <summary>
+            The active reader on which the sdk is listening for card events
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.ITransactionListener.OnPaymentEvent(PayPal.Here.SDK.Domain.PaymentEvent)">
+            <summary>
+            This method will be called whenever the payment manager needs to communicate a payment
+            related event to the application.
+            </summary>
+            <param name="e">PaymentEvent object the contains information about the event.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IAccessControlManager.InitializeMerchant(System.Threading.CancellationToken)">
+            <summary>
+            This API is called when a valid OAuth credential is set within the SDK and now,
+            we would like to get the merchant status and set an active merchant.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IAccessControlManager.InitializeMerchant(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.Merchant)">
+            <summary>
+            This API is called when a valid OAuth credential is set within the SDK and now,
+            we would like to get the merchant status and set an active merchant.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="merchant">An explicit merchant object to use (used by the private API for PPH)</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IAccessControlManager.IsHavingValidCredentials">
+            <summary>
+            Checks whether the set OAuth credential is valid by checking the expiration time.
+            </summary>
+            <returns>True is case the currently set token is a valid token.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IAccessControlManager.ShouldPerformCredentialCheck">
+            <summary>
+            Checks whether we would like to go ahead and validate the credentials set by the partner app.
+            
+            If the partner app is only providing the access token on the OAuthCredentials object then,
+            this would return a false. If they have provided the SDK with the expiration time and the refresh url
+            then, we would return a true and subsequently, invoke the "isHavingValidCredentials" to validate the
+            sanctity of the set credentials.
+            </summary>
+            <returns>True if the expiration date and refresh url is set else, false.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.AccessControlManager.#ctor(PayPal.Here.SDK.Services.IMerchantService,PayPal.Here.SDK.Managers.IMerchantManagerInternal,PayPal.Here.SDK.Services.IAuthenticationHandler,PayPal.Here.SDK.Services.IAuthenticationService,PayPal.Here.SDK.Services.ILocationService)">
+            <summary>
+            Constructor
+            
+            IMPORTANT: Should only be called as a factory method for the container!
+            </summary>
+            <param name="merchantService">The current MerchantService</param>
+            <param name="merchantManager">The current MerchantManager</param>
+            <param name="authenticationHandler">The current AuthenticationHandler</param>
+        </member>
+        <member name="T:PayPal.Here.SDK.Managers.ICardReaderManager">
+            <summary>
+            CardReaderManager is the entry point for interacting with CardReaders used for
+            credit card processing.
+            The CardReaderManager lets the caller tap into feedback events from the underlying
+            Card Reader without having to worry about the finer details of how the card readers work.
+            Typically, application developers would want to tap into Card Reader related events together with
+            the TransactionManager related events to get more context. However, in some cases, apps may just
+            want to tap into the raw events from the card reader layer to implement more advanced functionality.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.ActivateReader">
+            <summary>
+            This API is used to indicate to the CardReader layer that the application is now interested in
+            scanning for card data through one of the connected devices. Typically, applications do not have
+            to worry about controlling this as this part is taken care of automatically by the TransactionManager
+            However, this function is available should the app wish to take control of this timing on its own.
+            NOTE: if you decide to use this API rather than rely on the transaction manager to this automatically for
+            you then make sure that this gets called before attempting a card swipe or a card insert into one of the
+            reader devices. Without invoking this call the peripherals layer will NOT listen for card data from the peripherals
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.DeactivateReader">
+            <summary>
+            This is API is used by other parts of the SDK as well as by applications to indicate that we are no longer
+            interested in listening for authorization events (such as doing a card swipe)
+            The TransactionManager internally puts the CardReaderManager to "sleep" when a payment is cancelled or when the
+            application explicitly invokes the cancel APIs in the TransactionManager. This is an important step needed to ensure that
+            the battery in both these CardReaders as well as in the mobile device is conserved.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.RegisterCardReaderListener(PayPal.Here.SDK.ICardReaderListener)">
+            <summary>
+            Use this method to register a custom listener to tap into the various events associated
+            with the payment reader.
+            </summary>
+            <param name="listener">The listener interface defines the callbacks that will be invoked by the
+            CardReaderManager. Registering the same observer multiple times will simply get ignored
+            and the listener will just be registered once.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.UnregisterCardReaderListener(PayPal.Here.SDK.ICardReaderListener)">
+            <summary>
+            Unregister a previously registered CardReaderListener object. This will stop notifications coming through to this
+            listener and the reference to this listener will be released. If the listener object is null or is not previously
+            registered the SDK will silently ignore the call.
+            </summary>
+            <param name="listener">The listener object that was previously registered.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.ForceReaderInitialize(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This API will force the initialization of the card reader on the specified port.
+            Use this for cases when the reader is not auto-detected
+            </summary>
+            <param name="port">Reader type: Audio, USB ...</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.BeginMonitoring(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This API will start listening for the card swipers on the specified port. The port can be anything specified
+            in the enum ReaderConnectionTypes
+            </summary>
+            <param name="port">Port which should be the one of the value in enum ReaderConnectionTypes</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ICardReaderManager.EndMonitoring(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            This API will stop listening for the card swipers on the specified port. The port can be anything specified
+            in the enum ReaderConnectionTypes
+            </summary>
+            <param name="port">Port which should be the one of the value in enum ReaderConnectionTypes</param>
+        </member>
+        <member name="P:PayPal.Here.SDK.Managers.ICardReaderManager.AvailableReaders">
+            <summary>
+            Allows the app (or other SDK internals) to discover what readers are currently available. Currently 
+            available indicates that these devices are already paired/physically connected etc.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.CardReaderManager.#ctor(PayPal.Here.SDK.IPayPalReader)">
+            <summary>
+            Constructor
+            
+            IMPORTANT: Should only be called as a factory method for the container!
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.CardReaderManager.ActivateReader">
+            <summary>
+            Allow other parts of the SDK to put the device layer into a state
+            where it is expecting a card swipe or some other event to initiate
+            the payment authorization process.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:PayPal.Here.SDK.Managers.IMerchantManager" -->
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.RegisterMerchantListener(PayPal.Here.SDK.IMerchantListener)">
+            <summary>
+            Use this API to register a listener that will be notified with changes in the checked in clients list
+            See the documentation for the MerchantListener for more details on the callback APIs
+            </summary>
+            <param name="listener">this is the listener object that will be called back when the clients list status changes</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.UnregisterMerchantListener(PayPal.Here.SDK.IMerchantListener)">
+            <summary>
+            Use this API to un-register a listener that will be notified with changes in the checked in clients list
+            See the documentation for the MerchantListener for more details on the callback APIs
+            </summary>
+            <param name="listener">This is the listener object that will be called back when the clients list status changes</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.GetActiveMerchant">
+            <summary>
+            Returns the currently active merchant object. The Merchant object contains
+            useful information about the Merchant such as address, business name etc that
+            the application can use for various purposes. For example, the app want the
+            Merchant's address info so it can create a custom receipt and send it to the
+            printer
+            </summary>
+            <returns>The merchant object that is currently active. This value can be null
+            indicating that no merchant is logged in into the system. Note that this means that you will
+            not be able to invoke most of the APIs as the currently active merchant object is required
+            for most operations</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Managers.IMerchantManager.CheckinMerchant(System.Threading.CancellationToken,System.String,PayPal.Here.SDK.Domain.CheckedInMerchantLocation,System.Boolean)" -->
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Managers.IMerchantManager.SaveMerchantLocation(System.Threading.CancellationToken,System.String)" -->
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.CheckoutMerchant(System.Threading.CancellationToken)">
+            <summary>
+            Use this API to checkout the merchant from a given location.
+            The merchant will not be visible to any of clients and hence cannot take any payments from clients that
+            want to pay via "checked in" methodology.
+            
+            In case of a success, the merchant object is returned back with the merchant's location info being set to NULL
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.GetCheckedInClientsList(System.Threading.CancellationToken)">
+            <summary>
+            Use this API to request an update to the checked in clients list.
+            All the clients that are currently checked into the merchant's location would be retrieved and the merchant
+            can select a customer and take a payment from them.
+            
+            NOTE: Ideally, the notification of an updated client list should happen automatically
+            without the application having to invoke this API. However, we do not currently support
+            automatic update of the list. In future, once this feature becomes available this API would get
+            deprecated.
+            
+            The other thing to keep in mind is that this API does not return the delta between what was
+            returned previously and the current list. Instead, every time the API is called the entire list
+            is sent back up through the closure callback.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.GetCheckedInMerchantLocationsList(System.Threading.CancellationToken)">
+            <summary>
+            Use this API to request an update to the checked in merchant's location list.
+            All the locations where the merchant is currently checked in would be retrieved. This API could be used if the
+            merchant would like to know on what location(s) they are checked in.
+            </summary>
+            <param name="responseHandler">The responseHandler would notify the caller with the list of checked in merchant
+            locations in case of a success and an error object describing the failure in the form of a
+            MerchantErrors enum would be returned back in case of failure.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.SetMerchantLogo(System.Threading.CancellationToken,Windows.UI.Xaml.Media.Imaging.BitmapSource)">
+            <summary>
+            This method is to be called when we would like to set a logo for the merchant, that would be visible to
+            to all the clients/consumers.
+            </summary>
+            <param name="image">This represents the image stored locally on the device. Currently, the supported image formats are: JPG and PNG.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.RemoveMerchantLogo(System.Threading.CancellationToken)">
+            <summary>
+            This method is to be called when a merchant wants to remove this currently set logo.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.IMerchantManager.GetMerchantLogo(System.Threading.CancellationToken)">
+            <summary>
+            This method retrieves the merchant logo that is currently been set for the merchant.
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Managers.ITransactionManager">
+            <summary>
+            Used to take payments, collect money, and process refunds.
+            
+            There are two main ways to collect payment ...
+            1) for a simple fixed amount
+            2) for an itemized list of items
+            
+            TransactionManager is stateful.  It attempts to take a payment on the shopping cart it is holding and will work
+            in concert with the CardReaderManager to emit events the UI may need to respond to while taking payment. It will
+            emit these events to any TransactionListener that is registered with it.
+            
+            
+            Some Examples:
+            
+            Example of how to take a payment for a simple fixed amount.  This takes a payment for 42.50 in
+            the Merchant's default currency
+            
+            transactionManager.BeginPayment(new decimal("42.50"));
+            // Wait for the user swipe data to arrive then ...
+            transactionManager.ProcessPayment(PaymentType.CARD_READER, _responseHandler);
+            
+            
+            Example of how to take a payment for an itemized list of items.
+            
+            ShoppingCart cart = transactionManager.BeginPayment();
+            cart.AddItem(apples, 6);
+            cart.AddItem(juice, 1);
+            cart.AddItem(orange, 6); 
+            transactionManager.SetShoppingCart(cart);
+            
+            // Wait for the user swipe data to arrive then ...
+            transactionManager.FinalizePayment(PaymentType.CARD_READER, _responseHandler);
+            
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SetCardReaderMonitor(System.Boolean)">
+            <summary>
+            Configure the TransactionManager to start and stop listening for card swipes while performing a
+            transaction. By default, the TransactionManager performs this action but, if the application would
+            like to take control of this, set the boolean param to false. This would expect the application to
+            make use of CardReaderManager's ActivateReader and DeactivateReader
+            APIs to start and stop listening for card swipes.
+            </summary>
+            <param name="auto">pass false if the application would like to make use of the CardReaderManager's API to start and
+            stop listening for card swipes.
+            Pass true if the apps wants the SDK (TransactionManager) to automatically start and stop listening
+            for card swipes. This is the default behavior.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.GetIgnoreHardwareReaders">
+            <summary>
+            Discovers if TransactionManager is configured to ignore or work with attached payment readers.
+            </summary>
+            <returns>Returns true if we'll ignore payment readers during TransactionManager's payment processing.  False otherwise.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SetIgnoreHardwareReaders(System.Boolean)">
+            <summary>
+            Configure the TransactionManager to ignore OR work with any payment readers that might
+            be attached.
+            
+            The default behavior is for the TransactionManager to work with attached payment readers.  If
+            that is the desired behavior there is no need to call this method.
+            
+            It is not legal to call this method during a transaction.  Complete your transaction first, then
+            change this setting. Calling SetIgnoreHardwareReaders during a transaction will have no effect.
+            </summary>
+            <param name="ignore">Pass true to ignore readers, false to include them</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.IsProcessingAPayment">
+            <summary>
+            Discover if we're busy processing a payment we the back end.
+            </summary>
+            <returns>Returns true if we're currently processing a finalizePayment</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.HasActiveTransaction">
+            <summary>
+            Discover if we're currently handling a transaction.  While handling a transaction
+            we can accept a shopping cart, TransactionExtras, and can FinalizePayment.  If configured
+            to work with the hardware scanners (the default) we will also be scanning for card swipes.
+            </summary>
+            <returns>Returns true if we're currently handling a transaction.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.RegisterListener(PayPal.Here.SDK.ITransactionListener)">
+            <summary>
+            Register your PaymentListener to receive callbacks related to payment activities.
+            </summary>
+            <param name="listener">Your object which implements the ITransactionListener interface</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.UnregisterListener(PayPal.Here.SDK.ITransactionListener)">
+            <summary>
+            Unregister your PaymentListener to stop receiving callbacks related to payment activities.
+            </summary>
+            <param name="listener">Your object which implements the ITransactionListener interface</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Managers.ITransactionManager.BeginPayment(System.Decimal)" -->
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.BeginPayment">
+            <summary>
+            Let's you start an itemized payment
+            <para>This call will:</para>
+            <para>- Cause TransactionManager to be setup with an empty Invoice</para>
+            <para>- If a card reader is attached we will start scanning for card swipes.</para>
+            <para>Normal payment flow is as follows...</para>
+            <para>1) call beginPayment() or beginPayment(amount)</para>
+            <para>2) The user can then swipe a card (if paying by card)</para>
+            <para>3) You can also optionally do things like: </para>
+            <para>- set the Invoice</para>
+            <para>- set TransactionExtras</para>
+            <para>- set the tip</para>
+            <para>- set the Signature.</para>
+            <para>4) Then you attempt to collect payment using one of the FinalizePayment methods OR
+            you can cancel the transaction with CancelPayment(). Both FinalizePayment and 
+            CancelTransaction() cause us to stop scanning for card swipes.</para>
+            <para>
+            Note that you don't have to use this initial shopping cart returned by this method, you can always provide
+            a new shopping cart via the SetActiveInvoice(cart) method.
+            </para>
+            <para>
+            Also, if not in 'transaction only mode', this call will start the hardware scanning
+            for card swipes and card insertions.
+            </para>
+            </summary>
+            <returns>Returns a copy of the initial shopping cart we're using for this transaction.
+            If you make changes to the shopping cart (add a tip, or add items) make sure to apply your
+            changes using the setActiveInvoice call.
+            </returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.BeginPayment(PayPal.Here.SDK.Invoicing.Invoice)">
+            <summary>
+            Yet another configuration supported by the transaction manager to begin a payment operation. You can initiate
+            the payment workflow with a previously created invoice object and use that to process the payment. This method is
+            agnostic whether the payment is itemized or for a fixed item as that aspect depends on the number of items in the
+            invoice.
+            </summary>
+            <param name="invoice"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SetActiveInvoice(PayPal.Here.SDK.Invoicing.Invoice)">
+            <summary>
+            Supply a shopping cart for the TransactionManager to use during itemized payments.
+            This will overwrite any previous shopping cart in the transaction manager.  Note that we
+            make a copy of the cart you set into the transaction manager.  That means any changes you
+            make to the shopping cart after you have called setActiveInvoice will not be see by the
+            transaction manager and will not become part of the purchase unless you once again call SetActiveInvoice
+            </summary>
+            <param name="invoice">The Invoice to use for the current transaction.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.ProcessPayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.Enumerations.PaymentType,PayPal.Here.SDK.Invoicing.ITransactionController)">
+            <summary>
+            Collects money from a customer using the current PayPal Invoice.
+            <para>For cash payments pass in Cash as the payment type.</para>
+            <para>For credit card payments, pass in CardReader.  Etc.</para>
+            
+            <para>Do not use this function for manual credit card payment.</para>
+            <para>An error will be returned if you attempt to take a payment with an empty shopping cart.</para>
+            
+            <para>For CARD_READER payments we'll use the most recently scanned credit card since BeginPayment() was called.</para>
+            
+            <para>This method can only be called after a call to BeginPayment().</para>
+            
+            <para>Once you call this method you can no longer cancel the payment.</para>
+            
+            <para>
+            Once your payment is completed, the transaction manager will return to an idle state awaiting the
+            next call to BeginPayment (or DoRefund). Any Invoice or CreditCardInfo which may
+            have been set into the TransactionManager during the previous purchase will be forgotten and all state cleared.
+            </para>
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="paymentType">Specifies what kind of payment this is (Cash, CardReader, Check, etc. See PaymentType)</param>
+            <param name="customController"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.ProcessPayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.SecureCreditCard,PayPal.Here.SDK.Invoicing.ITransactionController)">
+            <summary>
+            Used to capture money from a customer using the supplied card data.
+            
+            You can pass in a KeyedInCardData object (derived from SecureCreditCard) to supply
+            unencrypted card data that was manually entered (via the UI), or scanned, etc.
+            
+            You can also pass in the SecureCreditCard data the CardReaderListener's onCardReadSuccess API
+            might have sent you when a customer scanned their card.
+            
+            The current shopping cart will be used.
+            
+            This method can only be called after a call to BeginPayment()
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="cardData">The remote card's info (card number, exp date, etc)</param>
+            <param name="customController"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.ProcessPayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.CheckedInClient,PayPal.Here.SDK.Invoicing.ITransactionController)">
+            <summary>
+            Used to capture money from a customer who is logged into your store via the PayPal Location system.
+            
+            This method can only be called after a call to BeginPayment()
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="client">A CheckedInClient that describes a user 'checked in' to your store.</param>
+            <param name="customController"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.DoRefund(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.TransactionRecord,System.Decimal)">
+            <summary>
+            Refunds the specified transaction for a given amount
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="record">A TransactionRecord object which describes the refund that is being attempted.  Contains the 
+            invoice, the amount we are attempting to refund, the transactionId, etc</param>
+            <param name="amount">The amount to refund</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.DoRefund(System.Threading.CancellationToken,System.String,System.Decimal)">
+            <summary>
+            Refunds the specified transaction for a given amount
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="transactionId">The transactionId of the transaction refund that is being attempted</param>
+            <param name="amount">The amount to refund</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.DoCashOrCheckRefund(System.Threading.CancellationToken,System.String)">
+            <summary>
+            Refund API call for Cash or Check Invoices. Just marks the invoices as refunded. Money never changes hands.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="invoiceId">id of the invoice to refund</param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.CheckRefundEligibility(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.SecureCreditCard,PayPal.Here.SDK.Domain.TransactionRecord)">
+            <summary>
+            Check the refund eligibility for the current card with the given historical payment
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="cardData">An ISecureCreditCard to check against the invoice for refund eligibility</param>
+            <param name="historicalPayment">Record of a payment from the past.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.CancelPayment">
+            <summary>
+            Call CancelPayment to cancel the current payment.
+             
+            <para>What this call does is:</para>
+            <para>- Moves the TransactionManager into an idle state.</para>
+            <para>- Causes the TransactionManager to forget any Invoice, Signature, card data, or TransactionExtras data it may have been holding.</para>
+            <para>- Stops scanning for card swipes (if a card reader is connected).</para>
+            <para>
+            Note, it is only legal to issue a CancelPayment between calls to BeginPayment and ProcessPayment.
+            That is because we can't cancel a payment before we begin it and we cannot cancel a payment 
+            once told to collect the funds (ProcessPayment).  Calling CancelPayment outside of those
+            bounds will cause a non-successful PPError to be returned AND the above listed actions not to be performed.
+            </para>
+            </summary>
+            <returns>Returns a PPError indicating if the cancel was successful or not.</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SerializeTransactionRecord(PayPal.Here.SDK.Domain.TransactionRecord)">
+            <summary>
+            Serialize the TransactionRecord into a String.
+            
+            This method is a utility to serialize a TransactionRecord object into a string. There is an equivalent deserialize
+            to reconstruct a TransactionRecord from the serialized string
+            Note that applications are not forced to use this API for serialization and deserialization. Should the app wish
+            it can handle serialization on its own
+            </summary>
+            <param name="record">The ITransactionRecord object that we want to serialize into a String. This implementation will return null if the input record is also null</param>
+            <returns>String representing the serialized TransactionRecord object. The app can then store it in its database for persistent storage</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.ReconstructTransactionRecord(System.String)">
+            <summary>
+            Deserialize the TransactionRecord from a given String
+            
+            This method is a utility method to help with reconstructing a TransactionRecord based on a String that represents
+            a previously serialized TransactionRecord.
+            TransactionRecords are artifacts that the SDK emits to the app in response to payment requests. Applications might
+            find it useful to be able to save off this record to persistent storage and being able to reconstruct the object later
+            For example, a TransactionRecord is returned when a payment is successful and it needs to be used later when a refund
+            needs to be processed. In this case, the app might just want to persistently store all successfully transaction records
+            so that they can be retrieved later
+            </summary>
+            <param name="serializedTransactionRecord">A String that represents a previously serialized TransactionRecord</param>
+            <returns>a TransactionRecord object reconstructed from the serialized string</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.FinalizePayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.TransactionRecord,PayPal.Here.SDK.Domain.Signature)">
+            <summary>
+            Used to capture the signature of the customer if it already hasn't been captured in the processPayment call
+            and complete the transaction.
+            In case of EMV related payments, this API should be used after the processPayment call has been
+            approved by the terminal. If the terminal declines, the transaction would be voided.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="record">The transaction record object that is returned back from the processPayment call</param>
+            <param name="signature">A signature of the customer.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SendReceipt(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.TransactionRecord,System.String,PayPal.Here.SDK.Domain.Enumerations.SendReceiptTransactionType)">
+            <summary>
+            Used to send the receipt of a transaction to a customer based on the email address or the phone number provided.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="record">The transaction record object that is returned back from the processPayment call. This will
+            contain all the necessary information required such as the invoice id, transaction id etc needed to send the receipt.
+            Use this API when the transaction record is available. For example, when the transaction is successful.</param>
+            <param name="sendTo">A string either containing the email address or the phone number of the recipient.</param>
+            <param name="transactionType">The type of transaction for the receipt to print</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SendReceipt(System.Threading.CancellationToken,System.String,System.String,PayPal.Here.SDK.Domain.Enumerations.SendReceiptTransactionType,System.String,System.String)">
+            <summary>
+            Used to send the receipt of a transaction to a customer based on the email address or the phone number provided.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="payPalInvoiceId">The Invoice Id associated with the transaction.
+            Use this API when the transaction record is not available, but the Invoice ID associated with a transaction is available.</param>
+            <param name="sendTo">A string either containing the email address or the phone number of the recipient.</param>
+            <param name="transactionType">The type of transaction for the receipt to print</param>
+            <param name="customerId">Optional Customer Id if available</param>
+            <param name="receiptPreferenceToken">Optional Receipt Preference Token if available</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.SendReceipt(System.Threading.CancellationToken,PayPal.Here.SDK.Invoicing.Invoice,System.String,PayPal.Here.SDK.Domain.Enumerations.SendReceiptTransactionType)">
+            <summary>
+            Used to send the receipt of a transaction to a customer based on the email address or the phone number provided.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="invoice">The invoice object that is obtained while calling beginPayment, which would also contain 
+            the invoice id needed to send the receipt. Use this API when there is no transaction record available. For example,
+            in case of a transaction declined or cancel.</param>
+            <param name="sendTo">A string either containing the email address or the phone number of the recipient.</param>
+            <param name="transactionType">The type of transaction for the receipt to print</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.AuthorizePayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.Enumerations.PaymentType)">
+            <summary>
+            Used to authorize a payment.
+            The application would first need to invoke beginPayment, insert line items
+            within the shopping cart/invoice and ask the customer to swipe their card.
+            Once the above is completed, invoke this API to perform an authorization on the invoice.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="paymentType">Specifies what kind of payment this is.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.AuthorizePayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.SecureCreditCard)">
+            <summary>
+            Used to authorize a manual payment.
+            The application would first need to invoke beginPayment, insert line items
+            within the shopping cart/invoice and manually insert the card information.
+            Once the above is completed, invoke this API to perform an authorization on the invoice.
+            </summary>
+            <param name="ct"></param>
+            <param name="cardData"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.CapturePayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.TransactionRecord)">
+            <summary>
+            Used to capture an already authorized payment and therefore, completing the transaction.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="record">The transaction record that is obtained while performing the authorization by calling 
+            the processPayment API. The transaction number within the record is then used to capture the payment.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.ITransactionManager.VoidAuthorization(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.TransactionRecord)">
+            <summary>
+            Used to void an authorized payment.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="record">The transaction record that is obtained while performing the authorization
+            by calling the processPayment API. The transaction number within the record is then used to void the payment.</param>
+        </member>
+        <member name="P:PayPal.Here.SDK.Managers.ITransactionManager.HasCardData">
+            <summary>
+            Discover if the transaction manager has received card swipe data that it can use
+            if you call finalizePayment(CARD_READER).
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Managers.ITransactionManager.CardData">
+            <summary>
+            The credit card to apply to the current transaction
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.MerchantManager.#ctor(PayPal.Here.SDK.Services.IMerchantService,PayPal.Here.SDK.Services.IAuthenticationHandler,PayPal.Here.SDK.Services.ILocationService,PayPal.Here.SDK.Services.IActiveMerchantHandler)">
+            <summary>
+            Constructor
+            
+            IMPORTANT: Should only be called as a factory method for the container!
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.MerchantManager.convertToPPError(PayPal.Here.SDK.Services.ServiceException)">
+            <summary>
+            Query to map the service errors to a more friendly PPError that would be seen by the 3rd party application.
+            </summary>
+            <param name="e">The error to convert</param>
+            <returns>The converted error</returns>
+        </member>
+        <member name="P:PayPal.Here.SDK.Managers.MerchantManager.IsMerchantCheckedIn">
+            <summary>
+            Query to check if the merchant is checked in or not.
+            This check is required in cases where certain merchant related operation mandates the merchant to be checked
+            in.
+            
+            For Example, in order to accept customer check in related payments, the merchant would first need to be
+            checked in.
+            </summary>
+            <returns>boolean true or false</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.#ctor(PayPal.Here.SDK.Managers.ICardReaderManagerInternal,PayPal.Here.SDK.Services.ILocationService,PayPal.Here.SDK.Services.IActiveMerchantHandler,PayPal.Here.SDK.Services.IInvoiceService,PayPal.Here.SDK.Services.IPaymentService,PayPal.Here.SDK.Services.IEMVHandler)">
+            <summary>
+            Constructor
+            
+            IMPORTANT: Should only be called as a factory method for the container!
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.ClearPaymentData">
+            <summary>
+            Clear out all the state re the current payment attempt.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.EmitPaymentEvent(PayPal.Here.SDK.Domain.Enumerations.PaymentEventType)">
+            <summary>
+            Emits a PaymentEvent to any object that is registered with the TransactionManager.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.SyncEndPayment(PayPal.Here.SDK.Errors.Enumerations.PaymentErrors)">
+            <summary>
+            SyncEndPayment is the same as asyncEndAuthorizeAttempt except you should call this when you know you're on the main UI thread.
+            asyncEndAuthorizeAttempt was created for use when you might not (or are not) on the main UI thread and it
+            posts an async message to the UI thread.
+            </summary>
+            <param name="onError"></param>
+            <param name="errorCode"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.EndProcessPaymentEarlyIfStateIsIncorrect(PayPal.Here.SDK.Domain.Enumerations.PaymentType)">
+            <summary>
+            Returns true if we've had to cancel the payment early.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.DoMerchantTakePayment(System.Threading.CancellationToken,PayPal.Here.SDK.Domain.Enumerations.PaymentType,PayPal.Here.SDK.Invoicing.ITransactionController,System.Boolean)">
+            <summary>
+            Called for encrypted card, non encrypted card, and checked-in payments.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Managers.TransactionManager.InvoiceMatchesWorkingInvoice(PayPal.Here.SDK.Invoicing.Invoice)">
+            <summary>
+            Does the passed in invoice match the invoice we're working on?
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Managers.TransactionManager.InterceptEventType">
+            <summary>
+            The Payment Events we'll send to the app.  These are currently a simple enum.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Managers.TransactionManager.InterceptEventType.PreAuthorize">
+            <summary>
+             Allow app to intercept before we authorize a transaction
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.Managers.TransactionManager.InterceptEventType.PostAuthorize">
+            <summary>
+            Allow app to intercept after we authorize a transaction
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:PayPal.Here.SDK.PayPalHereSDK" -->
+        <member name="F:PayPal.Here.SDK.PayPalHereSDK.Sandbox">
+            <summary>
+            Passed into init(), 'Sandbox' is used to init the SDK against the PayPal Sandbox (test) servers.
+            </summary>
+        </member>
+        <member name="F:PayPal.Here.SDK.PayPalHereSDK.Live">
+            <summary>
+            Passed into init(), 'Live' is used to init the SDK against the PayPal Live service.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.Init(System.Threading.CancellationToken,Windows.UI.Core.CoreDispatcher)">
+            <summary>
+            Call to initialize the SDK
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="dispatcher">
+            This is the dispatcher with UI access that the SDK will run some operations requiring this level of action
+            </param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.Init(System.Threading.CancellationToken,System.Func{System.Threading.CancellationToken,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.Tasks.Task},System.Func{System.Threading.CancellationToken,System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.Tasks.Task})">
+            <summary>
+            Call to initialize the SDK
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="dispatcherScheduler">
+            This is how you want the SDK to run tasks that will require dispatcher access
+            </param>
+            <param name="backgroundScheduler">
+            This is how you want the SDK to run tasks that will run in a background thread
+            </param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.SetCredentials(System.Threading.CancellationToken,PayPal.Here.SDK.Authentication.ICredentials,System.String)">
+            <summary>
+            Set the credentials object to be able to use the PayPal Services. See the Credentials object defined
+            in the domain namespace for detailed notes on creating these objects.
+            Note that the SDK keeps track of only one credentials object. If this API is invoked multiple times then
+            the older value will get rewritten.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="credentials">This is the credentials object that is being set as active for the SDK</param>
+            <param name="serverName">
+            A the servers from the GetAvailableServers list. Pass in the server name (not the url) and the SDK will now send 
+            payment and other requests to that backend service. 
+            This is usually set to one of two values. PayPalHereSDK.Sandbox or PayPalHereSDK.Live
+            
+            NOTE: Setting this to the right value is critical; be careful to ensure that 
+            your shipping app doesn't have this value set to Sandbox!
+            </param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.RegisterAuthenticationListener(PayPal.Here.SDK.IAuthenticationListener)">
+            <summary>
+            Register an AuthenticationListener with the SDK.  AuthenticationListener objects are notified when/if a token
+            becomes invalid.
+            </summary>
+            <param name="listener">The AuthenticationListener instance</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.UnregisterAuthenticationListener(PayPal.Here.SDK.IAuthenticationListener)">
+            <summary>
+            Unregister an AuthenticationListener from the SDK.
+            </summary>
+            <param name="listener">The AuthenticationListener instance</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.NotifyAuthenticationListeners">
+            <summary>
+            Notifies all listeners of that the Credential token has been found invalid.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.PayPalHereSDK.GetAvailableServers" -->
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.PayPalHereSDK.GetAllConfiguredServersMap" -->
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.GetCurrentServer">
+            <summary>
+             Returns the current service name.
+            </summary>
+            <returns>The name of the current service</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.SetOptionalServerList(System.String)">
+            <summary>
+            Use this API to set your own list of optional servers. Note that this simply allows you to point us
+            to base urls for various stages. Internally, we determine the port number to use for different APIs
+            based on some magic rules.
+            
+            The following servers are defined by default: 
+              - Sandbox (https://www.sandbox.paypal.com)
+              - Live (https://www.paypal.com)
+            </summary>
+            <param name="serverListJSON">A json formatted array of servers. Please see the sample application for the format</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.SetOptionalServerList(System.Collections.Generic.Dictionary{System.String,System.Uri})">
+            <summary>
+            Use this API to set your own list of optional servers. Note that this simply allows you to point us
+            to base urls for various stages. Internally, we determine the port number to use for different APIs
+            based on some magic rules.
+            
+            The following servers are defined by default: 
+              - Sandbox (https://www.sandbox.paypal.com)
+              - Live (https://www.paypal.com)
+            </summary>
+            <param name="serverList">A dictionary of known servers (name and actual URI)</param>
+            <remarks>
+            Names that are already part of the servers list will be ignored
+            </remarks>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.GetFakeMode">
+            <summary>
+            Gets a value indicating whether the SDK will point to a fake server for payment calls.
+            </summary>
+            <returns>true if fake mode is enabled</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.SetFakeMode(System.Boolean)">
+            <summary>
+            Enable or disable the fake mode.
+            When enabled, the SDK will point to a fake server for payment calls.
+            This only works in the debug mode.
+            </summary>
+            <param name="fakeMode">true to enable fake mode</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.GetFakeError">
+            <summary>
+            Gets a value indicating whether the SDK will return an error response for fake calls.
+            </summary>
+            <returns>true if fake error responses are enabled</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.SetFakeError(System.Boolean)">
+            <summary>
+            Enable or disable the fake errors.
+            When enabled, the SDK will return an error response for fake calls.
+            This only works in the debug mode.
+            </summary>
+            <param name="fakeError">true to enable fake errors</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.GetVersionInfo">
+            <summary>
+            Use this API to get the version information about the SDK. Version info is in the following format:
+            <para>Major.Minor.Build.Revision</para>
+            where 
+            <para>Major Version = API and behavior changes</para>
+            <para>Minor version = Some API changes, additions etc.</para>
+            <para>Build = updates, patches and fixes (Bug fixes)</para>
+            <para>Revision= internal changes</para>
+            </summary>
+            <returns>The version of the SDK</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.Pause(PayPal.Here.SDK.Domain.Enumerations.SDKServices)">
+            <summary>
+            Use this API when your application is being sent to the background.
+            The main purpose of this API is to pause (temporarily disable) some of the SDK related services
+            such as :
+            1. Interaction with the card readers.
+            So that resources could be released and the battery consumption is reduced.
+            
+            NOTE: Please make sure the app is not in the middle of an active transaction before calling this API,
+            as the SDK would stop interacting with the card readers (especially in case of EMV related transactions).
+            </summary>
+            <param name="serviceToPause">An enum that defines which service to disable.</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.PayPalHereSDK.Resume(PayPal.Here.SDK.Domain.Enumerations.SDKServices)">
+            <summary>
+             Use this API when your application is brought back to the foreground.
+             The main purpose of this API is to resume some of the previously disabled SDK related services
+             such as :
+             1. Interaction with the card readers.
+            </summary>
+            <param name="serviceToResume">An enum that defines which service to enable.</param>
+        </member>
+        <member name="P:PayPal.Here.SDK.PayPalHereSDK.IsInitialized">
+            <summary>
+            Method to know whether the SDK is initialized or not
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.PayPalHereSDK.CardReaderManager">
+            <summary>
+            Get an instance to the CardReaderManager object that can be used to
+            interface with the CardReaders connected to the PayPalHereSDK
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.PayPalHereSDK.TransactionManager">
+            <summary>
+            Get an instance to the TransactionManager object that allows you to take payments, set signatures, and
+            process refunds.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.PayPalHereSDK.MerchantManager">
+            <summary>
+            Get an instance to the MerchantManager object that allows you to
+            discover your merchant info, access
+            merchant settings, and fetch information such as what PayPal users are
+            checked into your store.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.PayPalHereSDK.InvoiceService">
+            <summary>
+            Get an instance to the InvoiceService object that allows you to
+            access more advanced functionnalities and gives you more controls over
+            your invoices. 
+            Please note that most common scenarios should be handled by the TransactionManager.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.PayPalHereSDK.ReferrerCode">
+            <summary>
+            The partner attribution referrer code within the SDK.
+            When a partner registers with PayPal, they are assigned an attribution code,
+            also known as the partner attribution code or the referrer code or even as BN code.
+            This string helps PayPal identify and perform analytics.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Readers.Common.CardReaderWatcher.Start(PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            Start watching for insertion or removal
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Readers.Common.CardReaderWatcher.Stop">
+            <summary>
+            Stop watching for insertion or removal
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Readers.Common.CardReaderWatcher.DelayedUpdate(System.Boolean,PayPal.Here.SDK.Domain.Enumerations.ReaderConnectionTypes)">
+            <summary>
+            Delaying the CardReaderPresenceChanged since many events for the same port can happen when adding/removing the device
+            </summary>
+            <param name="isPresent"></param>
+            <param name="port"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Readers.Common.CardReaderWatcher.HandleDeviceRemoved(Windows.Devices.Enumeration.DeviceWatcher,Windows.Devices.Enumeration.DeviceInformationUpdate)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+            <remarks>
+            may need to watch for known devices getting physically removed from the system. In that case
+            info will be null and we'll only have id to know it was removed. May need to keep a cache 
+            of known deviceId's to watch for physical removal of one we care about. Unlikely scenario for 
+            the whole headphone jack to be removed, but possible.
+            </remarks>
+        </member>
+        <member name="E:PayPal.Here.SDK.Readers.Common.CardReaderWatcher.CardReaderPresenceChanged">
+            <summary>
+            Raised when an insertion or removal is deteced from the headphone jack.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Readers.Swipers.GenericUsbSwiper.OnReleaseDeviceRequested(System.Object,Windows.Devices.PointOfService.ClaimedMagneticStripeReader)">
+            <summary>
+            Event handler for the Release Device Requested event fired when magnetic stripe reader receives Claim request from another application
+            </summary>
+            <param name="sender"></param>
+            <param name="args"> Contains the ClaimedMagneticStripeReader that is sending this request</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Readers.Swipers.GenericUsbSwiper.OnBankCardDataReceived(System.Object,Windows.Devices.PointOfService.MagneticStripeReaderBankCardDataReceivedEventArgs)">
+            <summary>
+            Event handler for the DataReceived event fired when a bank card is read by the magnetic stripe reader 
+            </summary>
+            <param name="sender"></param>
+            <param name="args"> Contains the MagneticStripeReaderBankCardDataReceivedEventArgs which contains the data obtained in the scan</param>
+        </member>
+        <member name="T:PayPal.Here.SDK.Readers.Swipers.RoamSwiper">
+            <remarks>
+            The audio swiper might fail if the volume of the headphone is too low OR 
+            the microphone has a volume too high!
+            </remarks>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.Cal.ICalLoggingService.Init">
+            Method to initialize the cal service to prepare itself to send messages
+            @param androidAppContext context used for preparing and sending the messages to cal
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IInvoiceService.CreateInvoice(System.Threading.CancellationToken,PayPal.Here.SDK.Invoicing.Invoice)">
+            <summary>
+            Creates an invoice
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="invoice">Invoice to create</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Services.IInvoiceService.UpdateInvoice(System.Threading.CancellationToken,PayPal.Here.SDK.Invoicing.Invoice)" -->
+        <member name="M:PayPal.Here.SDK.Services.IInvoiceService.DeleteInvoice(System.Threading.CancellationToken,PayPal.Here.SDK.Invoicing.Invoice)">
+            <summary>
+            Delete the specified invoice
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="invoice">Invoice to delete</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IInvoiceService.GetInvoice(System.Threading.CancellationToken,System.String)">
+            <summary>
+            Get a single invoice using the provided invoiceId
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="invoiceId">InvoiceId of the requested invoice</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IInvoiceService.GetInvoices(System.Threading.CancellationToken,System.Nullable{System.DateTimeOffset},System.Nullable{System.Int32})">
+            <summary>
+            Get invoices using the provided start date and page size
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="startDate"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IInvoiceService.SendInvoice(System.Threading.CancellationToken,System.String)">
+            <summary>
+            Sends the invoice to the buyer of the specified invoice.
+            </summary>
+            <param name="ct">A cancellation token that can be used by other objects or threads to receive notice of cancellation</param>
+            <param name="invoiceId">InvoiceId of the invoice to send</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Services.IMerchantService.GetMerchantPreference(System.Threading.CancellationToken)" -->
+        <!-- Badly formed XML comment ignored for member "M:PayPal.Here.SDK.Services.IMerchantService.GetMerchantStatus(System.Threading.CancellationToken)" -->
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.GetCheckedInClients(System.Threading.CancellationToken)">
+            <summary>
+            API for retrieving the list of checked in clients for a given merchant
+            based on the merchant's location id.
+            
+            A call handler needs to be implemented to handle the response and set the
+            List of CheckedInClient object with the said list.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.CheckInMerchant(System.Threading.CancellationToken,System.Double,System.Double,System.String)">
+            <summary>
+            API for checking in the merchant. Either the merchant app or the SDK
+            would need to provide the geo co-ordinate information about the
+            merchant's location. A banner message (provided by the merchant) could be
+            used to display to all the clients.
+            
+            Will return a CheckedInMerchantLocation with various fields/info.
+            </summary>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
+            <param name="bannerMessage"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.SaveMerchantLocation(System.Threading.CancellationToken,System.Double,System.Double,System.String)">
+            <summary>
+            API for updating merchant's checkin location. Either the merchant app or the SDK
+            would need to provide the geo co-ordinate information about the
+            merchant's location. A banner message (provided by the merchant) could be
+            used to display to all the clients.
+            
+            Will return a CheckedInMerchantLocation with various fields/info.
+            </summary>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
+            <param name="bannerMessage"></param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.CheckoutMerchant(System.Threading.CancellationToken)">
+            <summary>
+            API for checking the merchant out from a given location.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.GetCheckedInMerchantLocationList(System.Threading.CancellationToken)">
+            <summary>
+            API for getting a list of all the locations where the merchant is currently checked in.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.SetMerchantLogo(System.Threading.CancellationToken,System.Byte[])">
+            <summary>
+            API for setting a logo to the merchant location which would be seen by all the clients that would like to make a payment to the merchant.
+            
+            Possible values for the status: "Success" or "Failure" that indicate the success or failure of the API response.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IMerchantService.DeleteMerchantLogo(System.Threading.CancellationToken)">
+            <summary>
+            API for deleting the merchant logo that is set for a given location.
+            
+            Possible values for the status: "Success" or "Failure" that indicate the success or failure of the API response.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IServerMapping.SetOptionalServerList(System.String)">
+            <summary>
+            We'll let 3rd parties, and ourselves, pass in a map of 
+            service names and their URLs. These are the built in ones.
+            </summary>
+            <param name="serverListJSON">A json formatted array of servers. Please see the sample applicaiton for the format</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IServerMapping.SetOptionalServerList(System.Collections.Generic.Dictionary{System.String,System.Uri})">
+            <summary>
+            We'll let 3rd parties, and ourselves, pass in a map of 
+            service names and their URLs. These are the built in ones.
+            </summary>
+            <param name="serverList">List of servers to add to the list</param>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.IServerMapping.GetUrlForApi(System.String)">
+            <summary>
+            Call this to fetch the full URL to use, including port.
+            Handles both Live and stages and oauth set base URLs
+            </summary>
+            <param name="api">The API name such as 'DeviceInterrogationRequest'</param>
+            <returns>The url of the API</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.MerchantService.#ctor(PayPal.Here.SDK.Services.IServiceRequestFactory,PayPal.Here.SDK.Services.IAuthenticationHandler,PayPal.Here.SDK.Services.IActiveMerchantHandler)">
+            <summary>
+            Constructor
+            
+            IMPORTANT: Should only be called as a factory method for the container!
+            </summary>
+        </member>
+        <member name="T:PayPal.Here.SDK.Services.ServerMapping.ServiceAPIInfo">
+            <summary>
+            The ServiceAPIInfo describes what we need to access this API for Live and for stages.
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Services.ServiceNetworkResponse.#ctor(System.Int32,System.Byte[],System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            Creates a new network response.
+            </summary>
+            <param name="statusCode">the HTTP status code</param>
+            <param name="data">Response body</param>
+            <param name="headers">Headers returned with this response, or null for none</param>
+            <param name="notModified">True if the server returned a 304 and the data was already in cache</param>
+        </member>
+        <member name="P:PayPal.Here.SDK.Services.ServiceNetworkResponse.StatusCode">
+            <summary>
+            The HTTP status code.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Services.ServiceNetworkResponse.Data">
+            <summary>
+            Raw data from this response.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Services.ServiceNetworkResponse.Headers">
+            <summary>
+            Response headers.
+            </summary>
+        </member>
+        <member name="P:PayPal.Here.SDK.Services.ServiceNetworkResponse.NotModified">
+            <summary>
+            True if the server returned a 304 (Not Modified).
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Utilities.CardIssuerUtilities.GetCardIssuerBasedOnFirstFour(System.String)">
+            <summary>
+            Based on the provided 4 digits of the credit card, will find the matching CardIssuer.
+            </summary>
+            <param name="firstFour">the first 4 digits of the provided credit card</param>
+            <returns>Will return the matching card issuer. If not enough information was provided, Unknown will be returned</returns>
+        </member>
+        <member name="T:PayPal.Here.SDK.Utilities.LoggingHelper">
+            <summary>
+            A helper class to see debug logs in the UI
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Utilities.LoggingHelper.SetDebugLog(PayPal.Here.SDK.Utilities.IDebugLogging)">
+            <summary>
+            Set a UI logging object to see debug logs
+            </summary>
+            <param name="uilogs">UI logging object </param>
+        </member>
+        <member name="T:PayPal.Here.SDK.Utilities.IDebugLogging">
+            <summary>
+            Interface to help with displaying debug logs in the UI
+            </summary>
+        </member>
+        <member name="M:PayPal.Here.SDK.Utilities.IDebugLogging.AddDebugLog(System.String)">
+            <summary>
+            Method to add a log message to the UI
+            </summary>
+            <param name="message">The log message</param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Utilities.SystemInformation.GetOsVersionAsync">
+            <summary> 
+            Uses the WebView control to get the OS Version from the UserAgent string 
+            </summary> 
+            <returns></returns> 
+        </member>
+        <member name="M:PayPal.Here.SDK.Utilities.SystemInformation.GetUserAgent">
+            <summary> 
+            Uses WebView control to get the user agent string 
+            </summary> 
+            <returns></returns> 
+        </member>
+        <member name="M:PayPal.Here.SDK.Extensions.ValidationExtensions.Validation``1(``0)">
+            <summary>
+            Returns an extension point that can be used to validate the content of an object
+            </summary>
+            <typeparam name="T">The type of data that needs to be validated</typeparam>
+            <param name="value">The instance of the object to be validated</param>
+            <returns>The validation extension point</returns>
+        </member>
+        <member name="M:PayPal.Here.SDK.Extensions.ValidationExtensions.NotNull``1(PayPal.Here.SDK.Extensions.ValidationExtensionPoint{``0},System.String)">
+            <summary>
+            Used to validate that arguments are not null. Throws an ArgumentNullException if the extended value is null.
+            </summary>
+            <typeparam name="T">The type of data that needs to be validated</typeparam>
+            <param name="extensionPoint">The extension point being used for validation</param>
+            <param name="name">The name of the argument being validated</param>
+            <returns>The extended value if the value is not null.</returns>
+        </member>
+        <member name="T:PayPal.Here.SDK.Extensions.ValidationExtensionPoint`1">
+            <summary>
+            An extension point that is used for validation purposes
+            </summary>
+            <typeparam name="T">The type of data that needs to be validated</typeparam>
+        </member>
+        <member name="M:PayPal.Here.SDK.Utilities.Queries.QueryBuilderExtensions.PayloadParam(PayPal.Here.SDK.Utilities.Queries.QueryBuilder,System.String,System.String)">
+            <summary>
+            Add a payload parameter to the request
+            </summary>
+        </member>
+    </members>
+</doc>
